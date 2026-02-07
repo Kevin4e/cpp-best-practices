@@ -1,5 +1,5 @@
 ### 1. Do not use `using namespace`.
-**Reason**: If there are multiple symbols with the same name but in different namespaces, not specifying which namespace the symbol you want to use is in can cause name conflicts.  
+Reason: If there are multiple symbols with the same name but in different namespaces, not specifying which namespace the symbol you want to use is in can cause name conflicts.  
 
 Example:
 ```cpp
@@ -57,7 +57,7 @@ Reason: Comments next to the code can sometimes become verbose and hard to read.
 Reason: The size of a static collection does not change once instantiated, so it is semantically correct to define it as a constant.
 
 ### 8. Use `emplace_back` instead of `push_back` when you are constructing an object in-place or when the value is a temporary, especially for complex objects.
-Reason: emplace_back avoids creating a temporary copy when you are directly creating the object in the container.
+Reason: `emplace_back` avoids creating a temporary copy when you are directly creating the object in the container.
 
 ### 9. Use `size_t` for container indices and sizes.
 Reason: `size_t` is a large unsigned type designed for this purpose (just be careful when comparing with negative values).
@@ -65,4 +65,25 @@ Reason: `size_t` is a large unsigned type designed for this purpose (just be car
 ### 10. Mark ANY symbol that never changes as `const` (Const-correctness)
 Reasons:
   - Makes the code safer since it stops you from mutating symbols that are not supposed to be modified.
-  - The compiler can sometimes make certain optimizations if it knows a variable won’t change.
+  - The compiler can sometimes make certain optimizations if it knows a symbol won’t change.
+
+### 11. Store constant references when iterating in a collection of complex objects through a range-based for loop.
+Reason: range-based for loops create a copy of every element. Using a `const` reference prevents modification of the elements in the loop and avoids unnecessary copies.
+```cpp
+std::vector<std::string> v{};
+
+for (const auto& s : v) {
+    // ...
+}
+```
+
+### 12. Use `constexpr` for compile-time constants instead of macros.
+Reason: macros are untyped and use text substitution, while `constexpr` provides type safety, scope, and real compile-time evaluation.
+
+### 13. Prefer range-based for loops for all iterable containers when you don't need the index.
+Reason: clearer syntax, less error-prone.
+```cpp
+for (auto n : numbers) {
+    std::cout << n << '\n';
+}
+```
