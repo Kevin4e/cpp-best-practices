@@ -1,0 +1,68 @@
+### 1. Do not use `using namespace`.
+**Reason**: If there are multiple symbols with the same name but in different namespaces, not specifying which namespace the symbol you want to use is in can cause name conflicts.  
+
+Example:
+```cpp
+#include <iostream>
+
+namespace a {
+    int n = 10;
+}
+namespace b {
+    int n = 5;
+}
+
+using namespace a; // Brings a::n inside the global scope.
+using namespace b; // Brings b::n inside the global scope.
+
+int main() {
+    std::cout << n;
+    // Compiler sees 2 'n's and will say: "Which one are you referring??" -> Ambiguous (Name conflict)
+}
+```
+
+### 2. Use `\n` instead of `endl`.
+Reason: The `endl` object flushes the console after creating a new line, forcing the output, which is often unnecessary and slower than `\n`, which just creates a new line.
+
+### 3. Use `switch` instead of `else-if` chains when you have many cases with discrete values.
+Reason: A `switch` is sometimes faster than a chain of `else-if` statements because the compiler can perform jumps between cases, making the time to reach the first or last case roughly the same. In `else-if`, each condition is evaluated sequentially. It also improves readability.
+
+### 4. Use the `int` type whenever possible.
+Reason: The size of int is usually best suited to the architecture of most processors, so operations are normally faster. It’s often a good general choice.
+
+### 5. Use pre-increment instead of post-increment with objects.
+Reason: Post-increment has an extra step because a temporary copy of the object is created.
+
+> *Why does post-increment perform a temporary copy?*
+```cpp
+int main() {
+    int n = 5;
+    std::cout << n++; // Output is 5
+    // From now on n is 6
+    std::cout << n; // Output is 6
+}
+```
+This is what post-increment has conceptually done (under the hood):
+```cpp
+int tmp = n;
+n = n + 1;
+return tmp;
+```
+Now imagine we used this operation for a whole object, whose size is large and contains various fields, we would've had to entirely copy it for nothing.
+
+### 6. Place comments above lines if they are very long.
+Reason: Comments next to the code can sometimes become verbose and hard to read.
+
+### 7. Declare the size of a static collection as a constant.
+Reason: The size of a static collection does not change once instantiated, so it is semantically correct to define it as a constant.
+
+### 8. Use `emplace_back` instead of `push_back` when you are constructing an object in-place or when the value is a temporary, especially for complex objects.
+Reason: emplace_back avoids creating a temporary copy when you are directly creating the object in the container.
+
+### 9. Use `size_t` for container indices and sizes.
+Reason: `size_t` is a large unsigned type designed for this purpose (just be careful when comparing with negative values).
+
+### 10. Mark ANY symbol that never changes as `const` (Const-correctness)
+Reasons:
+  - Makes the code safer since it stops you from mutating symbols that are not supposed to be modified.
+  - The compiler can sometimes make certain optimizations if it knows a variable won’t change.
