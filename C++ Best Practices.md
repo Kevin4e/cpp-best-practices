@@ -34,7 +34,7 @@ Reason: A `switch` is sometimes faster than a chain of `else-if` statements beca
 ---
 
 ### 4. Use the `int` type whenever possible.
-Reason: The size of int is usually best suited to the architecture of most processors, so operations are normally faster. It’s often a good general choice.
+Reason: The size of `int` is usually best suited to the architecture of most processors, so operations are normally faster. It’s often a good general choice.
 
 ---
 
@@ -162,7 +162,7 @@ int arr[10];
 Better:
 ```cpp
 std::array<int, 10> arr;
-std::vector<int>arr[10];
+std::vector<int> arr(10);
 ```
 Reason(s):
 - Size is known
